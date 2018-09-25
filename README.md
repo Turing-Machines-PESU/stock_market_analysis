@@ -15,7 +15,7 @@ Created: 25 September 2018
   
   
 
-<b>To install the required packages<b>
+<b>To install the required packages</b>
 ```
   pip install -r requirements.txt
 ```
