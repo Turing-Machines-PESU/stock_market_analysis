@@ -1,0 +1,11 @@
+https://financetrain.com/best-python-librariespackages-finance-financial-data-scientists/
+
+https://github.com/bukosabino/ta       # Financial Terms and Templates
+https://github.com/johnbywater/quantdsl     # Numeric Analysis
+https://github.com/bashtage/arch            # Time Series Analysis
+http://www.statsmodels.org/stable/index.html   # Time Series Analysis
+https://github.com/pmorissette/ffn      # Graphing and Data transformations
+https://github.com/quantmind/dynts      # Time Series Analysis
+
+
+# More to be updated after inspection of the first link

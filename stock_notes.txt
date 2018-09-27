@@ -1,0 +1,42 @@
+
+Article: https://www.investopedia.com/university/technical/
+
+Technical analysis is based on three assumptions:
+
+1. The market discounts everything.
+2. Price moves in trends.
+3. History tends to repeat itself.
+
+
+The Efficient Market Hypothesis (EMH) is an investment theory whereby share prices reflect all information and consistent alpha generation is impossible.
+https://www.investopedia.com/terms/e/efficientmarkethypothesis.asp
+
+
+
+The Dow Jones Industrial Average (DJIA) is a price-weighted average of 30 significant stocks traded on the New York Stock Exchange (NYSE) and the Nasdaq. The DJIA was invented by Charles Dow in 1896.Often referred to as "the Dow," the DJIA is one of the oldest, single most-watched indices in the world and includes companies such as the General Electric Company, the Walt Disney Company, Exxon Mobil Corporation and Microsoft Corporation. When the TV networks say "the market is up today," they are generally referring to the Dow.
+https://www.investopedia.com/terms/d/djia.asp
+
+
+Types of Trends
+There are three types of trends:
+
+1. Uptrend
+2. Downtrend
+3. Sideways / Horizontal Trends
+
+A trendline is a simple charting technique whereby a line is added to a chart to represent the trend in a market or stock.Support levels are where the price rebounds higher multiple times, whereas resistance levels are where prices rebound lower multiple times.
+
+A channel consists of two trendlines that act as strong areas of support and resistance with the price bouncing around between them. 
+
+
+Support levels are where demand is perceived to be strong enough to prevent the price from falling further, while resistance levels are prices where selling is thought to be strong enough to prevent prices from rising higher.After the breakout, the upper trendline transitioned from a resistance level to a support level for the new trend.
+
+The trendline’s strength also becomes increasingly greater over time given the number of ‘touches’ and rebounds.There are also instance of ‘false breakouts’ when a price may breakout higher on low volume and then fall back into a price channel.
+
+Volume is simply the number of shares or contracts that trade over a given period – usually a day. Often times, volume is expressed as a bar chart directly below the price chart with the bars height illustrating how many shares have traded per period.
+
+Volume is used by technical analysts to confirm trends and chart patterns. The strength of any given price movement is measured primarily by the volume. In fact, a 50% rise in a stock price may not be all that relevant at all if it occurs on very little volume – just look at penny stocks.
+
+
+In addition to single day moves, the trend in volume over time can be related to price trends to determine if a stock is gaining or losing momentum. An example might be a stock that has been trending higher with declining volume, which suggests that the rally may be losing momentum. In that case, traders may want to be on the lookout for a reversal and perhaps reduce or sell their long positions in preparation. This is known as divergence.
+
