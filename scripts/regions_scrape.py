@@ -4,7 +4,6 @@ import csv
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select 
 
-
 d = webdriver.Chrome()
 base_url="https://trendogate.com/"
 d.get(base_url)
