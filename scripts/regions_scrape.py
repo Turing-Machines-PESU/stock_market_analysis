@@ -2,9 +2,8 @@ from time import sleep
 import re
 import csv
 from selenium import webdriver
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.support.wait import WebDriverWait
-import calendar 
+from selenium.webdriver.support.ui import Select 
+
 
 d = webdriver.Chrome()
 base_url="https://trendogate.com/"
