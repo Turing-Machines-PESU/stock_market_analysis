@@ -22,7 +22,6 @@ else:
 	r = requests.get("https://chromedriver.storage.googleapis.com/2.42/chromedriver_mac64.zip")
 	z = zipfile.ZipFile(io.BytesIO(r.content))
 	z.extractall()
- 
 
 d = webdriver.Chrome()
 base_url="https://trendogate.com/"
