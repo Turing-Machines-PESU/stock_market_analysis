@@ -40,3 +40,30 @@ Volume is used by technical analysts to confirm trends and chart patterns. The s
 
 In addition to single day moves, the trend in volume over time can be related to price trends to determine if a stock is gaining or losing momentum. An example might be a stock that has been trending higher with declining volume, which suggests that the rally may be losing momentum. In that case, traders may want to be on the lookout for a reversal and perhaps reduce or sell their long positions in preparation. This is known as divergence.
 
+Chart Properties
+
+1. Time Scale
+2. Price Scale and Price Point
+		
+		Linear price scales have even spacing between each price point, which means that a price that moves from $10 to $20 is the same distance as a price that moves from $40 to $50. In other words, the price scale measures absolute moves and doesn’t show the effects of percentage changes in value over time.
+
+		Logarithmic scales look at price movements in percentage terms, which means that the spacing between each point is equal to the percentage change. For instance, price change from $10 to $20 is 100% while a price change from $40 to $50 is only 25% even though the absolute difference is the same - $10. Logarithmic charts will show a smaller space between $40 and $50 than between $10 and $20 for this reason.
+
+Chart Types:
+
+1. Line Charts
+2. Bar Charts
+3. Candlesticks Chart
+4. Point and Figure Chart
+
+
+Line charts are the most basic type of chart because it represents only the closing prices over a set period. The line is formed by connecting the closing prices for each period over the timeframe.
+
+
+Bar charts expand upon the line chart by adding the open, high, low, and close – or the daily price range, in other words – to the mix. The chart is made up of a series of vertical lines that represent the price range for a given period with a horizontal dash on each side that represents the open and closing prices. The opening price is the horizontal dash on the left side of the horizontal line and the closing price is located on the right side of the line. If the opening price is lower than the closing price, the line is often shaded black to represent a rising period. The opposite is true for a falling period, which is represented by a red shade.
+
+
+Candlestick charts originated in Japan over 300 years ago, but have since become extremely popular among traders and investors. Like a bar chart, candlestick charts have a thin vertical line showing the price range for a given period that’s shaded different colors based on whether the stock ended higher or lower. The difference is a wider bar or rectangle that represents the difference between the opening and closing prices.
+
+
+

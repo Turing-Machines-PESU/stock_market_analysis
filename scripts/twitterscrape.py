@@ -4,6 +4,24 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.wait import WebDriverWait
 from datetime import timedelta, date
+import requests, zipfile, io
+import platform
+
+
+
+if platform.system() == "Windows":
+	r = requests.get("https://chromedriver.storage.googleapis.com/2.42/chromedriver_win32.zip")
+	z = zipfile.ZipFile(io.BytesIO(r.content))
+	z.extractall()
+elif platform.system() == "Linux":
+	r = requests.get("https://chromedriver.storage.googleapis.com/2.42/chromedriver_linux64.zip")
+	z = zipfile.ZipFile(io.BytesIO(r.content))
+	z.extractall()
+else:
+	r = requests.get("https://chromedriver.storage.googleapis.com/2.42/chromedriver_mac64.zip")
+	z = zipfile.ZipFile(io.BytesIO(r.content))
+	z.extractall()
+
 
 def daterange(start_date, end_date):
     for n in range(0,int ((end_date - start_date).days) + 1,7):
@@ -12,7 +30,7 @@ def daterange(start_date, end_date):
 start_date = date(2016, 12, 7)
 end_date = date(2016, 12, 30)
 
-with open('regions.csv') as csvfile:
+with open('../datasets/regions.csv') as csvfile:
     csvFile = csv.reader(csvfile,delimiter=",")
     places=[row[:-1] for row in csvfile]
 
@@ -23,7 +41,7 @@ d.get(base_url)
 
 
 columnTitleRow = ['Regions', 'Date', 'Hashtags']
-with open("twitter.csv", 'a',newline='') as csvfile:
+with open("../datasets/twitter.csv", 'a',newline='') as csvfile:
 		writer = csv.DictWriter(csvfile, fieldnames=columnTitleRow)
 		writer.writeheader()
 
@@ -51,7 +69,7 @@ try:
 						csv_list.append(date)
 						csv_list.append(text)
 						print(csv_list) 
-						with open("twitter.csv", "a") as output:
+						with open("../datasets/twitter.csv", "a") as output:
 							writer = csv.writer(output, lineterminator='\n')
 							writer.writerow(csv_list)
 					except:
@@ -64,7 +82,7 @@ try:
 				csv_list.append(date)
 				csv_list.append(text)
 				print(csv_list) 
-				with open("twitter.csv", "a") as output:
+				with open("../datasets/twitter.csv", "a") as output:
 					writer = csv.writer(output, lineterminator='\n')
 					writer.writerow(csv_list)
 
