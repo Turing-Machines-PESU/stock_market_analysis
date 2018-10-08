@@ -39,3 +39,5 @@ with open("../datasets/regions.csv", "w") as output:
     writer.writerow(['Regions'])
     for val in values:
         writer.writerow([val])   
+
+
