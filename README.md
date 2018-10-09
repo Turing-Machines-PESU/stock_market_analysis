@@ -13,7 +13,7 @@ Created: 25 September 2018
 <ol>
   <li> <b>25 September 2018:</b> Created the repository. Added datasets and scripts. </li>
   <li><b>27 September 2018:</b> Literature survey on required python packages and preprocessing on the text data from the trending topics</li>
-
+  <li><b>9 October 2018:<b> Analysis of twitter data</li>
 </ol>
   
   
