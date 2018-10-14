@@ -17,6 +17,7 @@ Created: 25 September 2018
   <li><b>13 October 2018:</b> Added working prototype of newly designed graph "TextoGram" [to branch textogram_prototype]</li>
   <li><b>14 October 2018:</b> Advanced Analysis on Xerox Inc and comparision with Google Inc. Fitted ARIMA model. Failed attempt to develop interesting insights.</li>
   <li><b>14 October 2018: </b> Preprocessed the Company data and Filtered out irrelevant data</li>
+  <li><b>14 October 2018: </b> Basic Summary Statistics on Company Data</li>
 </ol>
   
   
