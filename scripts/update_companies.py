@@ -8,7 +8,7 @@ for file in os.listdir(path):
     if file[0]!='.':
         companies.append(file.split('.')[0].upper())
 
-columnTitleRow = ['Symbol','Name','LastSale','MearketCap','IPOyear','Sector','industry','Summary Quote']
+columnTitleRow = ['Symbol','Name','LastSale','MarketCap','IPOyear','Sector','industry','Summary Quote']
 with open("stocks.csv", 'a',newline='') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=columnTitleRow)
     writer.writeheader()
