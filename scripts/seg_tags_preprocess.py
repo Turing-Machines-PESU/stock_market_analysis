@@ -28,5 +28,6 @@ for string in seg_tags.Hashtags:
     except:
         pass
 
+
 pp_tags.to_csv('../datasets/words_dates_list.csv',header=False,mode='a',index=False)
 
