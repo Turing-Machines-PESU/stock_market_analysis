@@ -37,6 +37,7 @@ for string in seg_tags.Seg_Hashtags:
 pp_tags = pd.DataFrame(columns={'keyword','value'})
 pp_tags.to_csv('../datasets/words_dates_list_gnrl.csv',columns={'keyword','value'},index=False)
 
+
 # list of dates for a word in general
 for string in seg_tags.Seg_Hashtags:
     x = str(string).split(" ")
