@@ -18,6 +18,7 @@ Created: 25 September 2018
   <li><b>14 October 2018:</b> Advanced Analysis on Xerox Inc and comparision with Google Inc. Fitted ARIMA model. Failed attempt to develop interesting insights.</li>
   <li><b>14 October 2018: </b> Preprocessed the Company data and Filtered out irrelevant data</li>
   <li><b>14 October 2018: </b> Basic Summary Statistics on Company Data</li>
+  <li><b>10 November 2018:</b> Segmentation of the hashtags and basic text preprocessing.</li>
   <li><b>12 November 2018: </b> Basic work on GUI.(Testing phase as of 13 Nov)</li>
   <li><b>13 November 2018:</b> Basic Forecasting. LSTM, Linear Regression.</li>
 </ol>
