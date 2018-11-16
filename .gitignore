@@ -1,0 +1,6 @@
+Stocks/*
+stocks.csv
+ETFs/*
+__pycache__/*
+*.pyc
+/.ipynb_checkpoints
