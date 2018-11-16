@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.filters.bk_filter import bkfilter
@@ -13,6 +14,16 @@ from statsmodels.tsa.holtwinters import ExponentialSmoothing
 from statsmodels.tsa.holtwinters import SimpleExpSmoothing
 
 
+# -----------  Utility Functions  -----------
+
+def rmse(data1, data2):
+	return math.sqrt(sum((np.array(data1.values) - np.array(data2.values))**2)/len(data1))
+
+def rolling_rmse(data1, data2, window = 3):
+	rolling_1 = data1.rolling(window)
+	rolling_2 = data2.rolling(window)
+
+	
 # -----------  Stationarity Tests  -----------
 
 
@@ -36,7 +47,7 @@ def kpss_test(X):
 	output["KPSS Statistics"] = result[0]
 	output["p value"] = result[1]
 	output["Number of Lags Used"] = result[2]
-	output["Critical values"] = result[4]
+	output["Critical values"] = result[3]
 
 	return output
 
@@ -78,6 +89,9 @@ def random_walk_filter(X, low = 50, high = 300, drift = True):
 	
 	cycle, trend = cffilter(X, low = low, high = high, drift = drift)
 	return cycle
+
+
+# -----------  Causality Test  -----------
 
 
 def prepare_data_granger(dataFrame1, dataFrame2):
