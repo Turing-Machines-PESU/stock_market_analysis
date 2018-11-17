@@ -21,6 +21,7 @@ Created: 25 September 2018
   <li><b>10 November 2018:</b> Segmentation of the hashtags and basic text preprocessing.</li>
   <li><b>12 November 2018: </b> Basic work on GUI.(Testing phase as of 13 Nov)</li>
   <li><b>13 November 2018:</b> Basic Forecasting. LSTM, Linear Regression.</li>
+  <li><b>15 November 2018:</b> Design GUI Screens. Finalise Pipeline.</li>
 </ol>
   
   
