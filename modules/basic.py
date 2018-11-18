@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import math
+import random
 
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.filters.bk_filter import bkfilter
@@ -13,7 +14,8 @@ from statsmodels.tsa.filters.cf_filter import cffilter
 from statsmodels.tsa.holtwinters import ExponentialSmoothing
 from statsmodels.tsa.holtwinters import SimpleExpSmoothing
 
-
+from datetime import date, timedelta
+import datetime
 # -----------  Utility Functions  -----------
 
 def rmse(data1, data2):
@@ -22,6 +24,35 @@ def rmse(data1, data2):
 def rolling_rmse(data1, data2, window = 3):
 	rolling_1 = data1.rolling(window)
 	rolling_2 = data2.rolling(window)
+
+def generte_dates(start, end, length):
+	d1 = datetime.datetime.strptime(start, "%Y-%m-%d").date()
+	d2 = datetime.datetime.strptime(end, "%Y-%m-%d").date()
+
+	date_list = map(str, [d1 + timedelta(days=x) for x in range(0, (d2-d1).days + 1, 1)])
+	if length > len(date_list):
+		print("Date generation not possible")
+	else:
+		return random.choice(date_list, size = length, replace= False)
+
+def impute_points(dataFrame, required_dates):
+	# dataFrame : data frame with index = datetime and one column "Close"
+	# required_dates : required dates in list of string
+	
+	new_data = pd.DataFrame(np.nan, index=required_dates, columns = ["Close"])
+	new_data.reset_index(inplace=True)
+	new_data.columns = ["Date", "Close"]
+	new_data['Date'] = new_data['Date'].astype('datetime64[ns]')
+	new_data.set_index("Date", inplace=True)
+
+	new_data.update(dataFrame, overwrite = False)
+
+	new_data = new_data.interpolate(method = 'time', order = 4)
+	new_data.fillna(new_data.Close.mean(), inplace = True)
+
+	return new_data
+
+
 
 	
 # -----------  Stationarity Tests  -----------
