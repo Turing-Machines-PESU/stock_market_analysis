@@ -19,7 +19,12 @@ import datetime
 # -----------  Utility Functions  -----------
 
 def rmse(data1, data2):
-	return math.sqrt(sum((np.array(data1.values) - np.array(data2.values))**2)/len(data1))
+	#data1 and data2 are numpy arrays
+	if len(data1) == len(data2):
+		return math.sqrt(sum((np.array(data1) - np.array(data2))**2)/len(data1))
+	else:
+		min_len = min([len(data1), len(data2)])
+		return math.sqrt(sum((np.array(data1[min_len:]) - np.array(data2[min_len:]))**2)/min_len)
 
 def rolling_rmse(data1, data2, window = 3):
 	rolling_1 = data1.rolling(window)
@@ -123,14 +128,6 @@ def random_walk_filter(X, low = 50, high = 300, drift = True):
 
 
 # -----------  Causality Test  -----------
-
-
-def prepare_data_granger(dataFrame1, dataFrame2):
-	# Data Frame 1 and Data Frame 2 are raw data frames
-	dataFrame1.set_index("Date", inplace = True)
-	dataFrame2.set_index("Date", inplace = True)
-	data = pd.concat([dataFrame1["2016": "2017"].Close, dataFrame2["2016": "2017"].Close], axis = 1)
-	return data
 
 def granger_test(data, maxlag = 50):
 	# Test for granger causality
