@@ -1,7 +1,8 @@
 
 # coding: utf-8
 
-# In[100]:
+# In[1]:
+
 
 import sys
 sys.path.append('../')
@@ -11,7 +12,7 @@ import matplotlib
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 import seaborn as sns
-sns.set(style="whitegrid")
+sns.set(style="darkgrid")
 import tkinter as tk
 from tkinter import font  as tkfont 
 from tkinter.ttk import Combobox
@@ -22,46 +23,43 @@ import os
 import random
 
 
-# In[101]:
+# In[2]:
+
 
 stocks_data = pd.read_csv("../stocks.csv")
 stocks_data['Date'] = stocks_data['Date'].astype('datetime64[ns]')
 stocks_data = stocks_data.set_index('Date')
 
 
-# In[102]:
+# In[8]:
+
 
 stocks_data_2016 = stocks_data['2016']
 
 
-# In[103]:
+# In[9]:
+
 
 companies = deepcopy(stocks_data_2016.Company)
 companies.drop_duplicates(inplace=True)
 companies.reset_index(drop=True,inplace=True)
 
 
-# In[104]:
+# In[10]:
+
 
 comp_list = list(companies)
 
 
-# In[105]:
+# In[11]:
+
 
 comp_stocks=pd.read_csv("../datasets/filtered_companies.csv")
 comp_stocks['Symbol']=comp_stocks.Symbol.str.lower()
 
 
-# In[110]:
+# In[12]:
 
-# data_words = pd.read_csv("../datasets/words_dates_list_cw.csv")
-# data_words.drop_duplicates(inplace=True)
-# data_words.reset_index(drop=True,inplace=True)
-# word_data = deepcopy(data_words.keyword)
-# word_data.drop_duplicates(inplace=True)
-# word_data.reset_index(drop=True,inplace=True)
-# # word_list = sorted(map(str, list(word_data)))
-# word_list = list(map(str, list(word_data)))
 
 data_words = pd.read_csv("../datasets/words_dates_list_cw.csv")
 data_words.drop_duplicates(inplace=True)
@@ -69,17 +67,19 @@ data_words.reset_index(drop=True,inplace=True)
 key_count = data_words.groupby(["keyword"], sort=False).count().reset_index()
 key_count = key_count.loc[key_count['freq'] >= 3]
 word_data = deepcopy(key_count.keyword)
-# word_list = sorted(map(str, list(word_data)))
+#word_list = sorted(map(str, list(word_data)))
 word_list = list(map(str, list(word_data)))
 
 
-# In[111]:
+# In[13]:
+
 
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler()
 
 
-# In[112]:
+# In[14]:
+
 
 # Signal extention
 def extend_signal(data):
@@ -95,7 +95,8 @@ def extend_signal(data):
     return data.fillna(0)
 
 
-# In[115]:
+# In[206]:
+
 
 # GUI for stock details
 class App(tk.Tk):
@@ -110,7 +111,8 @@ class App(tk.Tk):
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        for F in (StartPage, PageOne, PageTwo):
+        self.pages = (StartPage, PageOne, PageTwo)
+        for F in self.pages:
             page_name = F.__name__
             frame = F(parent=container, controller=self)
             self.frames[page_name] = frame
@@ -160,7 +162,6 @@ class StartPage(tk.Frame):
         lbl2.configure(background='#ffffff')
         lbl2.grid(row=3,column=1,padx=20)
 
-
         sb = tk.Scrollbar(self, orient=tk.VERTICAL)
         global lb
         lb = tk.Listbox(self,selectmode=tk.MULTIPLE, yscrollcommand=sb.set)
@@ -169,17 +170,17 @@ class StartPage(tk.Frame):
         sb.config(command=lb.yview)
         lb.grid(row=4,column=1,sticky=tk.E)
 
-        button = tk.Button(self, text="submit",fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=self.select, width = 8)
-        button.grid(row=4,column=2)
+        subbtn = tk.Button(self, text="submit",fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=self.select, width = 8)
+        subbtn.grid(row=4,column=2)
 
         w = tk.Label(self, text="Test for Stationarity", font=("Helvetica", 16),justify=tk.LEFT)
         w.configure(background='#ffffff')
         w.grid(row=5,column=2)
         
-        gotobtnright = tk.Button(self, text="Go to Dashboard",fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=lambda: controller.show_frame("PageOne"),width=20)
+        gotobtnright = tk.Button(self, text="Go to Dashboard",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=lambda: controller.show_frame("PageOne"),width=20)
         gotobtnright.grid(row=11,column=0)
-        
-        
+    
+      
     # graph plot
     def plot(self,company,keys):
         cp = pd.DataFrame(stocks_data_2016[stocks_data_2016.Company==company].Close,columns={'Close'})
@@ -205,7 +206,7 @@ class StartPage(tk.Frame):
             ext_result = extend_signal(result[word])
             ext_result=pd.DataFrame(ext_result,columns={word})
             temp.append(ext_result)
-        print(temp)
+        #print(temp)
 
         plt.figure(figsize = (10,5))
         plt.plot(scaled_cp,label=company)
@@ -227,13 +228,14 @@ class StartPage(tk.Frame):
         def insert_into_entry():
             items = list(map(int, lb.curselection()))
             if items != ():
+                global selected_item
                 selected_item=[lb.get(items[i]) for i in range(len(items))]
                 return (selected_item)
 
         comp = self.var.get()
         keys = insert_into_entry()
-        print(comp)
-        print(keys)
+        #print(comp)
+        #print(keys)
         path,cp = self.plot(comp,keys)
         self.canvas.delete("all")
         self.c.delete('all')
@@ -291,46 +293,17 @@ class StartPage(tk.Frame):
         # dfuller
         self.c1.create_text(58,15,fill="Black",font="Times 10 bold",
                                 text="Dickey Fuller Test", justify = "center")
-#         self.c1.create_text(115,35,fill="Black",font="Times 10",
-#                                 text="ADF Statistics :  " + str(df_res["ADF Statistics"]) )
-#         self.c1.create_text(115,55,fill="Black",font="Times 10",
-#                                 text="p value :  " + str(df_res["p value"]) )
-#         self.c1.create_text(82,75,fill="Black",font="Times 10",
-#                                 text="Number of lags used : " + str(df_res["Number of Lags Used"]) )
-#         self.c1.create_text(62,95,fill="Black",font="Times 10",
-#                                 text="Critical values : ")
-#         self.c1.create_text(100,115,fill="Black",font="Times 10",
-#                                 text="1% :  " + str(df_res["Critical values"]['1%']))
-#         self.c1.create_text(100,135,fill="Black",font="Times 10",
-#                                 text="5% :  " + str(df_res["Critical values"]['5%']))
-#         self.c1.create_text(100,155,fill="Black",font="Times 10",
-#                                 text="10% :  " + str(df_res["Critical values"]['10%']))
-        Text = "\n".join(["{0} :{1}".format(key, df_res[key]) for key in df_res if key != "Critical values"])
+        Text = "\n".join(["{0} :  {1}".format(key, df_res[key]) for key in df_res if key != "Critical values"])
         for key in df_res["Critical values"]:
-            Text += ("\n \t {0} : {1}".format(key, df_res["Critical values"][key]))
+            Text += ("\n \t {0} :  {1}".format(key, df_res["Critical values"][key]))
         self.c1.create_text(135, 80, fill = "Black", font = "Times 10", text = Text, justify='left')
         
         #kpss
         self.c.create_text(38,15,fill="Black",font="Times 10 bold",
-                                text="KPSS Test")
-#         self.c.create_text(135,35,fill="Black",font="Times 10",
-#                                 text="KPSS Statistics : " + str(kpss_res["KPSS Statistics"]) )
-#         self.c.create_text(120,55,fill="Black",font="Times 10",
-#                                 text="p value :  " + str(kpss_res["p value"]) )
-#         self.c.create_text(98,75,fill="Black",font="Times 10",
-#                                 text="Number of lags used : " + str(kpss_res["Number of Lags Used"]) )
-#         self.c.create_text(74,95,fill="Black",font="Times 10",
-#                                 text="Critical values : ")
-#         self.c.create_text(90,115,fill="Black",font="Times 10",
-#                                 text="1% :  " + str(kpss_res["Critical values"]['1%']))
-#         self.c.create_text(90,135,fill="Black",font="Times 10",
-#                                 text="5% :  " + str(kpss_res["Critical values"]['5%']))
-#         self.c.create_text(90,155,fill="Black",font="Times 10",
-#                                 text="10% :  " + str(kpss_res["Critical values"]['10%']))
-        
-        Text_kpss = "\n".join(["{0} :{1}".format(key, kpss_res[key]) for key in kpss_res if key != "Critical values"])
+                                text="KPSS Test",justify = "center")
+        Text_kpss = "\n".join(["{0} :  {1}".format(key, kpss_res[key]) for key in kpss_res if key != "Critical values"])
         for key in kpss_res["Critical values"]:
-            Text_kpss += ("\n \t {0} : {1}".format(key, kpss_res["Critical values"][key]))
+            Text_kpss += ("\n \t {0} :  {1}".format(key, kpss_res["Critical values"][key]))
         self.c.create_text(135, 80, fill = "Black", font = "Times 10", text = Text_kpss, justify='left')
         
 
@@ -342,11 +315,69 @@ class PageOne(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         
-        gotobtnleft = tk.Button(self, text="<",fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=lambda: controller.show_frame("StartPage"),width=5)
-        gotobtnleft.grid(row=21,column=0)
+        self.canvas = tk.Canvas(self, bg="white", height=450, width=900)
+        self.canvas.grid(row=0,rowspan=15,columnspan=10,padx=40,pady=5)
         
-        gotobtnright = tk.Button(self, text=">",fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=lambda: controller.show_frame("PageTwo"),width=5)
-        gotobtnright.grid(row=21,column=1)
+        self.c= tk.Canvas(self, bg="white", height=170, width=320)
+        self.c.grid(row=0,rowspan=5,column=11,padx=10, pady=15)
+        
+        self.c1 = tk.Canvas(self, bg="white", height=170, width=320)
+        self.c1.grid(row=6,rowspan=5,column=11,padx=10, pady=15)
+        
+        l1 = tk.Label(self, text="Granger Test",font='Helvetica 11 bold',justify=tk.CENTER)
+        l1.configure(background='#ffffff')
+        l1.grid(row=11,rowspan=2,column=11,pady=0)
+
+        self.c2 = tk.Canvas(self, bg="white", height=200, width=320)
+        self.c2.grid(row=13,rowspan=5,column=11,padx=10, pady=5)
+        
+        self.c3 = tk.Canvas(self, bg="white", height=100, width=320)
+        self.c3.grid(row=16,rowspan=3,column=8,padx=0, pady=5)
+        
+        l2 = tk.Label(self, text="Data Transformation",font='Helvetica 11 bold',justify=tk.CENTER)
+        l2.configure(background='#ffffff')
+        l2.grid(row=16,column=1)
+        
+        tf_methods = ['Raw Data','Log Transformation','1st order Differencing','2nd order Differencing']
+        self.var = tk.StringVar(self)
+        self.var.set(tf_methods[0])
+        
+        combo = Combobox(self,textvariable=self.var,width=25)
+        combo['values']= tf_methods
+        combo.grid(row=16,column=2,padx=20)
+        
+        l3 = tk.Label(self, text="Smoothing techniques",font='Helvetica 11 bold',justify=tk.CENTER)
+        l3.configure(background='#ffffff')
+        l3.grid(row=17,column=1,pady=30)
+        
+        smooth_methods = ['Exponential Smoothing','Simple Exponential Smoothing','Moving Average']
+        self.var1 = tk.StringVar(self)
+        self.var1.set(smooth_methods[0])
+        
+        combo1 = Combobox(self,textvariable=self.var1,width=25)
+        combo1['values']= smooth_methods
+        combo1.grid(row=17,column=2,padx=20,pady=30)
+        
+        l4 = tk.Label(self, text="Filter techniques",font='Helvetica 11 bold',justify=tk.CENTER)
+        l4.configure(background='#ffffff')
+        l4.grid(row=18,column=1)
+        
+        filter_methods = ['Baxter King','Hodrick Prescott','Random Walk']
+        self.var2 = tk.StringVar(self)
+        self.var2.set(filter_methods[0])
+        
+        combo2 = Combobox(self,textvariable=self.var2,width=25)
+        combo2['values']= filter_methods
+        combo2.grid(row=18,column=2,padx=20)
+        
+        subbtn = tk.Button(self, text="submit",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',width=8)
+        subbtn.grid(row=17,column=5)
+        
+        gotobtnleft = tk.Button(self, text="<",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=lambda: controller.show_frame("StartPage"),width=5)
+        gotobtnleft.grid(row=19,column=5)
+        
+        gotobtnright = tk.Button(self, text=">",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=lambda: controller.show_frame("PageTwo"),width=5)
+        gotobtnright.grid(row=19,column=6)
         
 
 # screen 3
@@ -355,11 +386,28 @@ class PageTwo(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         self.controller = controller
-        label = tk.Label(self, text="This is page 2", font=controller.title_font)
-        label.pack(side="top", fill="x", pady=10)
-        button = tk.Button(self, text="Go to the start page",
-                           command=lambda: controller.show_frame("StartPage"))
-        button.pack()
+        
+        l = tk.Label(self, text="Stock Prediction",font='Sans-serif 30 bold',justify=tk.CENTER)
+        l.configure(background='#ffffff')
+        l.grid(row=0, column=0,columnspan=30,pady=(5,5), padx=(10,10))
+        
+        self.canvas = tk.Canvas(self, bg="white", height=500, width=950)
+        self.canvas.grid(row=1,rowspan=15,columnspan=10,padx=40,pady=20)
+        
+        lrbtn = tk.Button(self, text="Linear Regression",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',width=20)
+        lrbtn.grid(row=5,column=13)
+        
+        arimabtn = tk.Button(self, text="ARIMA",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',width=20)
+        arimabtn.grid(row=6,column=13)
+        
+        lstmbtn = tk.Button(self, text="LSTM",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',width=20)
+        lstmbtn.grid(row=7,column=13)
+
+        prophetbtn = tk.Button(self, text="Prophet",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',width=20)
+        prophetbtn.grid(row=8,column=13)
+        
+        gotobtnleft = tk.Button(self, text="<",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=lambda: controller.show_frame("PageOne"),width=5)
+        gotobtnleft.grid(row=17,column=5)
 
 
 
@@ -370,19 +418,4 @@ if __name__ == "__main__":
     window.geometry("%dx%d+0+0" % (w, h))
     window.title("Stock Details")
     window.mainloop()
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
 
