@@ -14,6 +14,8 @@ import statsmodels.api as sm
 import visualize as vs
 import stock_data as sd
 from fbprophet import Prophet
+from statsmodels.sandbox.regression.predstd import wls_prediction_std
+import pandas as pd
 
 from basic import rmse
 
@@ -83,7 +85,26 @@ def prophet(X):
 
 	return rmse(np.array(forecast[-len(test_data):].yhat), test_data.Close)
 
+def regression_model(X):
+	# Send data frame with only one column "Date" and the index set as date.
+	# Date from 2016 to the end of the dataset
+	data = X.reset_index()
+	data['Date'] = data['Date'].astype('datetime64[ns]')
+	data.set_index("Date", inplace=True)
+	test_data = data["2017"]
+	train_data = data["2016"]
+	test_data.reset_index(inplace=True)
+	train_data.reset_index(inplace=True)
 
+	model = sm.GLSAR(train_data.Close, train_data.index.values, 50)
+	results = model.fit()
+	predictions = results.predict(list(range(len(train_data) + len(test_data))))
+	test_data.set_index("Date", inplace=True)
+	train_data.set_index("Date", inplace=True)
+	predictions = pd.DataFrame(predictions, index=data["2016":].index)
+	merged = pd.concat([train_data.Close, test_data.Close, predictions], axis = 1)
+	merged.columns = ["Train Data", "Test Data", "Fitted Values"]
+	merged.plot()
 
 # data = pd.read_csv("../Stocks/goog.us.txt")
 # data['Date'] = data['Date'].astype('datetime64[ns]')
