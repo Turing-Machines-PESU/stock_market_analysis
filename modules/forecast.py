@@ -3,16 +3,12 @@ import itertools
 import numpy as np
 import matplotlib.pyplot as plt
 warnings.filterwarnings("ignore")
-import pandas as pd
 import statsmodels.api as sm
-import matplotlib
 import os
 import seaborn as sns
 sns.set_style('whitegrid')
 from pyramid.arima import auto_arima
 import statsmodels.api as sm
-import visualize as vs
-import stock_data as sd
 from fbprophet import Prophet
 from statsmodels.sandbox.regression.predstd import wls_prediction_std
 import pandas as pd
