@@ -44,16 +44,16 @@ def impute_points(dataFrame, required_dates):
 	# dataFrame : data frame with index = datetime and one column "Close"
 	# required_dates : required dates in list of string
 	
-	new_data = pd.DataFrame(np.nan, index=required_dates, columns = ["Close"])
+	new_data = pd.DataFrame(np.nan, index=required_dates, columns = ["freq"])
 	new_data.reset_index(inplace=True)
-	new_data.columns = ["Date", "Close"]
+	new_data.columns = ["Date", "freq"]
 	new_data['Date'] = new_data['Date'].astype('datetime64[ns]')
 	new_data.set_index("Date", inplace=True)
 
 	new_data.update(dataFrame, overwrite = False)
 
 	new_data = new_data.interpolate(method = 'time', order = 4)
-	new_data.fillna(new_data.Close.mean(), inplace = True)
+	new_data.fillna(new_data.freq.mean(), inplace = True)
 
 	return new_data
 

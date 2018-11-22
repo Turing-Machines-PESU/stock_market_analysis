@@ -7,7 +7,7 @@ import pandas as pd
 import statsmodels.api as sm
 import os
 import seaborn as sns
-sns.set_style('whitegrid')
+sns.set_style('darkgrid')
 from pyramid.arima import auto_arima
 import statsmodels.api as sm
 from fbprophet import Prophet
@@ -20,7 +20,7 @@ from keras.layers.core import Dense, Activation, Dropout
 from sklearn.metrics import mean_squared_error
 from sklearn.utils import shuffle
 
-from basic import rmse
+from modules.basic import rmse
 
 # -----------  Forecasting Models  -----------
 
@@ -30,20 +30,20 @@ def auto_arimax(X, test_split = 0.2):
     # Before sending data. The x axis labels wont get plotted  if not done.
     # plt.imsave() outside this function to save plot
 
-    test_samples = int(X.shape[0] * test_split)
-    train_data, test_data = X[:-test_samples], X[-test_samples:]
-    train_data.columns = ["Training Data"]
-    test_data.columns = ["Test Data"]
+	test_samples = int(X.shape[0] * test_split)
+	train_data, test_data = X[:-test_samples], X[-test_samples:]
+	train_data.columns = ["Training Data"]
+	test_data.columns = ["Test Data"]
 
-    stepwise_model = auto_arima(X, start_p=1, start_q=1,max_p=3, max_q=3, m=12,start_P=0, seasonal=True,d=1, D=1, trace=True,error_action='ignore',suppress_warnings=True,stepwise=True)
-    stepwise_model.fit(train_data)
+	stepwise_model = auto_arima(X, start_p=1, start_q=1,max_p=3, max_q=3, m=12,start_P=0, seasonal=True,d=1, D=1, trace=True,error_action='ignore',suppress_warnings=True,stepwise=True)
+	stepwise_model.fit(train_data)
 
-    predictions = stepwise_model.predict(n_periods = len(test_data))
-    predictions = pd.DataFrame(predictions,index = test_data.index,columns=['Prediction'])
-    result = pd.concat([train_data, test_data, predictions], axis = 1)
-    result.plot()
-    
-    return rmse(np.array(test_data).flatten(), np.array(predictions).flatten())
+	predictions = stepwise_model.predict(n_periods = len(test_data))
+	predictions = pd.DataFrame(predictions,index = test_data.index,columns=['Prediction'])
+	result = pd.concat([train_data, test_data, predictions], axis = 1)
+	result.plot()
+
+	return rmse(np.array(test_data).flatten(), np.array(predictions).flatten())
 
 
 def shallow_lstm(X):
@@ -80,7 +80,7 @@ def shallow_lstm(X):
     
 	predictions = pd.DataFrame(testPredict, index = x_test.index[:-2])
 	results = pd.concat([store_data, predictions], axis = 1)
-	results.columns = ["Train + Test", "Predictions"]    
+	results.columns = ["Train + Test", "Predictions"]
 	results.plot()
 	
 	return rmse(np.array(testX).flatten(), np.array(testPredict).flatten())
@@ -89,14 +89,13 @@ def shallow_lstm(X):
 def prophet(X):
 	# Pass DataFrame with data from 2016 i,e data["2016": ]
 	# Use plt.imsave() outside function
-	
-	X = data["2016":]
+
 	X.reset_index(inplace=True)
 	X['Date'] = X['Date'].astype('datetime64[ns]')
 	X.set_index("Date", inplace=True)
 
 	train_data = X["2016"]
-	test_data = X["2017":]
+	test_data = X["2017"]
 	test_data.reset_index(inplace=True)
 	test_data['Date'] = test_data['Date'].astype('datetime64[ns]')
 	test_data.set_index("Date", inplace=True)
@@ -109,12 +108,13 @@ def prophet(X):
 
 	future = model.make_future_dataframe(periods=int(len(test_data) + 100))
 	forecast = model.predict(future)
-
+	
+	
 	figure = model.plot(forecast)
 	# forecast.yhat.plot()
 	# result = pd.concat([X.Close, forecast.yhat], axis = 1)
+	
 	test_data.Close.plot(color = 'r', label="Test Data")
-	plt.legend()
 
 	return rmse(np.array(forecast[-len(test_data):].yhat), test_data.Close)
 
