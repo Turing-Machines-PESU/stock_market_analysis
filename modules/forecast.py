@@ -3,6 +3,7 @@ import itertools
 import numpy as np
 import matplotlib.pyplot as plt
 warnings.filterwarnings("ignore")
+import pandas as pd
 import statsmodels.api as sm
 import os
 import seaborn as sns
