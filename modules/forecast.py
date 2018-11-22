@@ -72,7 +72,7 @@ def shallow_lstm(X):
 	model.add(LSTM(4, input_shape=(1, look_back)))
 	model.add(Dense(1))
 	model.compile(loss='mean_squared_error', optimizer='adam')
-	model.fit(trainX, y, epochs=50, batch_size=1, verbose=2)
+	model.fit(trainX, y, epochs=20, batch_size=1, verbose=2)
 
 	trainPredict = model.predict(trainX)
 	testPredict = model.predict(testX)
