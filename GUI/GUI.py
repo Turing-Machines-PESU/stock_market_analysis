@@ -3,6 +3,7 @@
 
 # In[1]:
 
+
 import sys
 sys.path.append('../')
 import pandas as pd
@@ -28,6 +29,7 @@ import random
 
 # In[2]:
 
+
 stocks_data = pd.read_csv("../stocks.csv")
 stocks_data['Date'] = stocks_data['Date'].astype('datetime64[ns]')
 stocks_data = stocks_data.set_index('Date')
@@ -35,10 +37,12 @@ stocks_data = stocks_data.set_index('Date')
 
 # In[3]:
 
+
 stocks_data_2016 = stocks_data['2016']
 
 
 # In[4]:
+
 
 companies = deepcopy(stocks_data_2016.Company)
 companies.drop_duplicates(inplace=True)
@@ -47,10 +51,12 @@ companies.reset_index(drop=True,inplace=True)
 
 # In[5]:
 
+
 comp_list = list(companies)
 
 
 # In[6]:
+
 
 comp_stocks=pd.read_csv("../datasets/filtered_companies.csv")
 comp_stocks['Symbol']=comp_stocks.Symbol.str.lower()
@@ -58,23 +64,29 @@ comp_stocks['Symbol']=comp_stocks.Symbol.str.lower()
 
 # In[7]:
 
+
 data_words = pd.read_csv("../datasets/words_dates_list_cw.csv")
 data_words.drop_duplicates(inplace=True)
 data_words.reset_index(drop=True,inplace=True)
 key_count = data_words.groupby(["keyword"], sort=False).count().reset_index()
-key_count = key_count.loc[key_count['freq'] >= 3]
+key_count = key_count.loc[key_count['freq'] >= 5]
 word_data = deepcopy(key_count.keyword)
 #word_list = sorted(map(str, list(word_data)))
 word_list = list(map(str, list(word_data)))
+for i in word_list:
+    if 'phone' in i:
+        print(i)
 
 
 # In[8]:
+
 
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler()
 
 
 # In[9]:
+
 
 # Signal extention
 def extend_signal(data):
@@ -90,12 +102,12 @@ def extend_signal(data):
     return data.fillna(0)
 
 
-# In[20]:
+# In[11]:
+
 
 # GUI for stock details
 comp = "xxx"
 keys ="xxx"
-res=0
 class App(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -191,7 +203,6 @@ class StartPage(tk.Frame):
             word_count_data['Date'] = word_count_data['Date'].astype('datetime64[ns]')
             word_count_data= word_count_data.set_index('Date')
             word_count = pd.DataFrame(word_count_data.freq,columns={'freq'})
-            
             # Smoothing and signal extension
             result = moving_average(word_count,3)
             ext_result = extend_signal(result.freq)
@@ -211,6 +222,7 @@ class StartPage(tk.Frame):
         cp = pd.DataFrame(stocks_data_2016[stocks_data_2016.Company==company].Close,columns={'Close'})
         scaled_cp = pd.DataFrame(scaler.fit_transform(cp),columns={'Close'})
         scaled_cp.set_index(cp.index,inplace=True)
+        
 
         temp = self.smooth_keys(keys)
 
@@ -255,44 +267,6 @@ class StartPage(tk.Frame):
         label.image = img 
         image.close()
 
-        """# company details
-        x = comp_stocks[comp_stocks.Symbol==comp]
-        x.reset_index(drop=True,inplace=True)
-        if(x.empty):
-            self.c.create_text(120,35,fill="Black",font="Times 13 italic bold",
-                                text="Company details not found")
-
-        else:
-            self.c.create_text(30,15,fill="Black",font="Times 10 bold",
-                                text="Name:")
-
-            self.c.create_text(180,15,fill="Black",font="Times 10",
-                                text=x.Name[0])
-
-            self.c.create_text(40,40,fill="Black",font="Times 10 bold",
-                                text="LastSale:")
-
-            self.c.create_text(105,40,fill="Black",font="Times 10",
-                                text=x.LastSale[0])
-
-            self.c.create_text(47,70,fill="Black",font="Times 10 bold",
-                                text="MarketCap:")
-
-            self.c.create_text(125,70,fill="Black",font="Times 10",
-                                text=x.MarketCap[0])
-
-            self.c.create_text(40,100,fill="Black",font="Times 10 bold",
-                                text="IPOyear:")
-
-            self.c.create_text(107,100,fill="Black",font="Times 10",
-                                text=x.IPOyear[0])
-
-            self.c.create_text(35,130,fill="Black",font="Times 10 bold",
-                                text="Sector:")
-
-            self.c.create_text(112,130,fill="Black",font="Times 10",
-                                text=x.Sector[0])
-        """        
         # Dickey Fuller test and KPSS test
         df_res = aDickeyFuller(cp.Close)
         kpss_res = kpss_test(cp.Close)
@@ -337,8 +311,17 @@ class PageOne(tk.Frame):
         l1.configure(background='#ffffff')
         l1.grid(row=11,rowspan=2,column=11,pady=0)
 
-        self.c2 = tk.Canvas(self, bg="white", height=200, width=320)
-        self.c2.grid(row=13,rowspan=5,column=11,padx=10, pady=5)
+        vbar=tk.Scrollbar(self,orient=tk.VERTICAL)
+        self.c2 = tk.Canvas(self, bg="white", height=220, width=320,yscrollcommand=vbar.set)
+        self.c2.grid(row=13,rowspan=5,column=11,padx=0, pady=5,sticky=tk.E)
+        win = tk.Frame(self.c2)
+        self.c2.create_window(0,0, window = win, anchor = "nw")
+        win.update_idletasks()
+        self.c2.configure(scrollregion = (1,1,win.winfo_width(),win.winfo_height()))
+
+        vbar.grid(row=13,rowspan=5,column=12,sticky=(tk.NS,tk.W))
+        vbar.config(command=self.c2.yview)
+        
         
         self.c3 = tk.Canvas(self, bg="white", height=130, width=320)
         self.c3.grid(row=16,rowspan=3,column=8,padx=0, pady=5)
@@ -468,6 +451,7 @@ class PageOne(tk.Frame):
         temp_cp = extend_signal(temp_cp.Close)
         temp_cp = self.fm_dict[fm](temp_cp)
         temp_cp = pd.DataFrame(temp_cp,columns=['Close'])
+        
         # Scaling
         scaled_cp = pd.DataFrame(scaler.fit_transform(temp_cp),columns={'Close'})
         scaled_cp.set_index(temp_cp.index,inplace=True)
@@ -511,11 +495,37 @@ class PageOne(tk.Frame):
         RMSE={}
         res_granger = {}
         for key_data,word in zip(imputed_key,keys):
+            #print(key_data.isna().sum())
             x=pd.concat([scaled_cp,key_data],axis=1)
-            global res
-            res = granger_test(x)
-            
             RMSE[word]=rmse(x.Close,x[word])
+            lags=50
+            try:                
+                res = granger_test(x)
+                pvalues = {}
+                for i in range(10,lags+1,10):
+                    pvalues["lag "+str(i)]=res[i][0]['ssr_ftest'][1]
+                res_granger[word]=pvalues 
+            except Exception as e:
+                lags = int(str(e).split()[-1])
+                print(str(e))
+                print(lags)
+                
+                res = granger_test(x,lags)
+                pvalues = {}
+                s = 1
+                e = lags+1
+                if lags < 10 :
+                    skip = 2
+                elif lags < 30:
+                    skip = 4
+                elif lags < 50:
+                    skip = 10          
+                for i in range(s,lags+1,skip):
+                    pvalues["lag "+str(i)]=res[i][0]['ssr_ftest'][1]
+                res_granger[word]=pvalues
+                
+            
+        print(res_granger)
 
         
         #RMSE
@@ -523,6 +533,17 @@ class PageOne(tk.Frame):
                                 text="Root Mean Square Error",justify = "center")
         Text_rmse = "\n".join(["{0} :  {1}".format(key, RMSE[key]) for key in RMSE])
         self.c3.create_text(105, 70, fill = "Black", font = "Times 10", text =Text_rmse , justify='left')
+        
+        #Granger test
+        Text_rmse=""
+        self.c2.create_text(150,20, fill = "Black", font = "Times 11 bold", text = "*Lower is better*", justify='left')
+        for word in keys:
+            Text_rmse += word+" :\n"
+            Text_rmse+= "   p value :\n"
+            Text_rmse += "\n".join(["         {0} :  {1}".format(lag, res_granger[word][lag]) for lag in res_granger[word]])
+            Text_rmse+="\n"
+        print(Text_rmse)
+        self.c2.create_text(120, 120, fill = "Black", font = "Times 10", text =Text_rmse , justify='left')
 
 
         
@@ -535,6 +556,7 @@ class PageTwo(tk.Frame):
         tk.Frame.__init__(self, parent)
         self.controller = controller
         
+        self.rmse = {}
         l = tk.Label(self, text="Stock Prediction",font='Sans-serif 30 bold',justify=tk.CENTER)
         l.configure(background='#ffffff')
         l.grid(row=0, column=0,columnspan=30,pady=(5,5), padx=(10,10))
@@ -545,17 +567,19 @@ class PageTwo(tk.Frame):
         self.c = tk.Canvas(self, bg="white", height=120, width=260)
         self.c.grid(row=10,rowspan=3,column=12,padx=0, pady=5)
         
-        prophetbtn = tk.Button(self, text="Prophet",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=self.prophet,width=20)
-        prophetbtn.grid(row=5,column=12)
+        lstmbtn = tk.Button(self, text="LSTM",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=self.lstm,width=20)
+        lstmbtn.grid(row=5,column=12)
         
-        arimabtn = tk.Button(self, text="ARIMAX",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=self.arimax,width=20)
-        arimabtn.grid(row=6,column=12)
+        prophetbtn = tk.Button(self, text="Prophet",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=self.prophet,width=20)
+        prophetbtn.grid(row=6,column=12)
+        
+        arimabtn = tk.Button(self, text="AUTO_ARIMAX",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=self.auto_arimax,width=20)
+        arimabtn.grid(row=7,column=12)
         
         lrbtn = tk.Button(self, text="Linear Regression",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=self.linear_regression,width=20)
-        lrbtn.grid(row=7,column=12)
+        lrbtn.grid(row=8,column=12)
 
-        lstmbtn = tk.Button(self, text="LSTM",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=self.lstm,width=20)
-        lstmbtn.grid(row=8,column=12)
+        
         
         gotobtnleft = tk.Button(self, text="<",font='Helvetica 9 bold',fg='white', bg='#13ade0',relief=tk.GROOVE,activebackground='#1da1f2',activeforeground='white',command=lambda: controller.show_frame("PageOne"),width=5)
         gotobtnleft.grid(row=17,column=5)
@@ -573,8 +597,9 @@ class PageTwo(tk.Frame):
         label.image = self.image 
         image.close()
         
-    def create_canvas_img(self,rmse,company):
-        PATH = "graph_images/"+company+".jpeg"
+    def create_canvas_img(self,rmse,company,method=""):
+        PATH = "graph_images/"+company+"_"+method+".jpeg"
+            
         plt.title("company : "+ company,fontsize=10)
         plt.xlabel("Date")
         plt.legend()
@@ -600,50 +625,88 @@ class PageTwo(tk.Frame):
        
         self.c.create_text(105, 50, fill = "Black", font = "Times 10", text =rmse , justify='left')
 
-
+    
+    def scale_cp(self,cp):
+        cp =np.log(cp)
+        scaled_cp = pd.DataFrame(scaler.fit_transform(cp),columns={'Close'})
+        scaled_cp.set_index(cp.index,inplace=True)
+        return scaled_cp
+    
+    def is_img_exists(self,PATH,rmse):
+        self.canvas.delete('all')
+        self.c.delete("all")
+        # graph
+        image = Image.open(PATH)
+        self.img = ImageTk.PhotoImage(image)
+        self.canvas.create_image(480,300, image=self.img)
+        label = tk.Label(image=self.img)
+        label.image = self.img 
+        image.close()
         
+        #RMSE
+        self.c.create_text(90,15,fill="Black",font="Times 10 bold",
+                                text="Root Mean Square Error",justify = "center")
+       
+        self.c.create_text(105, 50, fill = "Black", font = "Times 10", text =rmse , justify='left')
+
         
     def linear_regression(self):
         
         stocks_data_2016_end = stocks_data['2016':]
         cp = pd.DataFrame(stocks_data_2016_end[stocks_data_2016_end.Company==comp].Close,columns={'Close'})
+        scaled_cp =self.scale_cp(cp)
         PATH = "loading.jpg"
-        self.load_image(PATH)
-        rmse = regression_model(cp)
-        self.create_canvas_img(rmse,comp)
+        grp_img_path = "graph_images/"+comp+"_lr"+".jpeg"
+        if not os.path.exists(grp_img_path):
+            self.load_image(PATH)
+            self.rmse['lr'] = regression_model(scaled_cp)
+            self.create_canvas_img(self.rmse['lr'],comp,"lr")
+        else:
+            self.is_img_exists(grp_img_path,self.rmse['lr'])
+            
         
         
-    def arimax(self):
+    def auto_arimax(self):
         stocks_data_2016_end = stocks_data['2016':]
         cp = pd.DataFrame(stocks_data_2016_end[stocks_data_2016_end.Company==comp].Close,columns={'Close'})
+        scaled_cp =self.scale_cp(cp)
         PATH = "loading.jpg"
-        self.load_image(PATH)
-        rmse = auto_arimax(cp)
-        self.create_canvas_img(rmse,comp)
-        
+        grp_img_path = "graph_images/"+comp+"_arimax"+".jpeg"
+        if not os.path.exists(grp_img_path):
+            self.load_image(PATH)
+            self.rmse['arimax'] = auto_arimax(scaled_cp)
+            self.create_canvas_img(self.rmse['arimax'],comp,"arimax")
+        else:
+            self.is_img_exists(grp_img_path,self.rmse['arimax'])
     
     def lstm(self):
         stocks_data_2016_end = stocks_data['2016':]
         cp = pd.DataFrame(stocks_data_2016_end[stocks_data_2016_end.Company==comp].Close,columns={'Close'})
-        path = "loading.jpg"
-        self.load_image(path)
-        rmse = shallow_lstm(cp)
-        self.create_canvas_img(rmse,comp)
+        scaled_cp =self.scale_cp(cp)
+        PATH = "loading.jpg"
+        grp_img_path = "graph_images/"+comp+"_lstm"+".jpeg"
+        if not os.path.exists(grp_img_path):
+            self.load_image(PATH)
+            self.rmse['lstm'] = shallow_lstm(scaled_cp)
+            self.create_canvas_img(self.rmse['lstm'],comp,"lstm")
+        else:
+            self.is_img_exists(grp_img_path,self.rmse['lstm'])
+    
         
 
     def prophet(self):
         stocks_data_2016_end = stocks_data['2016':]
         cp = pd.DataFrame(stocks_data_2016_end[stocks_data_2016_end.Company==comp].Close,columns={'Close'})
-        PATH = 'loading.jpg'
-        self.load_image(PATH)
-        rmse = prophet(cp)
-        self.create_canvas_img(rmse,comp)
+        scaled_cp =self.scale_cp(cp)
+        PATH = "loading.jpg"
+        grp_img_path = "graph_images/"+comp+"_p"+".jpeg"
+        if not os.path.exists(grp_img_path):
+            self.load_image(PATH)
+            self.rmse['p'] = prophet(scaled_cp)
+            self.create_canvas_img(self.rmse['p'],comp,"p")
+        else:
+            self.is_img_exists(grp_img_path,self.rmse['p'])
         
-        
-        
-        
-        
-
 
 if __name__ == "__main__":
     window = App()
@@ -652,24 +715,4 @@ if __name__ == "__main__":
     window.geometry("%dx%d+0+0" % (w, h))
     window.title("Stock Details")
     window.mainloop()
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
-
-
-# In[ ]:
-
-
 
