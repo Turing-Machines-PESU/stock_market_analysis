@@ -16,12 +16,17 @@ Created: 25 September 2018
   <li><b>9 October 2018:</b> Analysis of twitter data</li>
   <li><b>13 October 2018:</b> Added working prototype of newly designed graph "TextoGram" [to branch textogram_prototype]</li>
   <li><b>14 October 2018:</b> Advanced Analysis on Xerox Inc and comparision with Google Inc. Fitted ARIMA model. Failed attempt to develop interesting insights.</li>
-  <li><b>14 October 2018: </b> Preprocessed the Company data and Filtered out irrelevant data</li>
-  <li><b>14 October 2018: </b> Basic Summary Statistics on Company Data</li>
+  <li><b>14 October 2018:</b> Preprocessed the Company data and Filtered out irrelevant data</li>
+  <li><b>14 October 2018:</b> Basic Summary Statistics on Company Data</li>
   <li><b>10 November 2018:</b> Segmentation of the hashtags and basic text preprocessing.</li>
-  <li><b>12 November 2018: </b> Basic work on GUI.(Testing phase as of 13 Nov)</li>
+  <li><b>12 November 2018:</b> Basic work on GUI.(Testing phase as of 13 Nov)</li>
   <li><b>13 November 2018:</b> Basic Forecasting. LSTM, Linear Regression.</li>
   <li><b>15 November 2018:</b> Design GUI Screens. Finalise Pipeline.</li>
+  <li><b>18 November 2018:</b> Modularization and Integration. </li>
+  <li><b>20 November 2018:</b> Bug Fixing and Debugging.</li>
+  <li><b>21 November 2018:</b> GUI Integration. Video Recording. Editing.</li>
+  <li><b>22 November 2018:</b> First draft of the Report.</li>
+  <li><b>23 November 2018:</b> Finalise report. Testing and Debugging.</li>
 </ol>
   
   
