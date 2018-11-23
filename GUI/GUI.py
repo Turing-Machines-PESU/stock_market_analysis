@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[32]:
 
 
 import sys
@@ -25,9 +25,10 @@ from modules.basic import *
 from modules.forecast import *
 import os
 import random
+warnings.filterwarnings('ignore')
 
 
-# In[2]:
+# In[15]:
 
 
 stocks_data = pd.read_csv("../stocks.csv")
@@ -35,13 +36,13 @@ stocks_data['Date'] = stocks_data['Date'].astype('datetime64[ns]')
 stocks_data = stocks_data.set_index('Date')
 
 
-# In[3]:
+# In[22]:
 
 
 stocks_data_2016 = stocks_data['2016']
 
 
-# In[4]:
+# In[23]:
 
 
 companies = deepcopy(stocks_data_2016.Company)
@@ -49,20 +50,20 @@ companies.drop_duplicates(inplace=True)
 companies.reset_index(drop=True,inplace=True)
 
 
-# In[5]:
+# In[24]:
 
 
 comp_list = list(companies)
 
 
-# In[6]:
+# In[25]:
 
 
 comp_stocks=pd.read_csv("../datasets/filtered_companies.csv")
 comp_stocks['Symbol']=comp_stocks.Symbol.str.lower()
 
 
-# In[7]:
+# In[26]:
 
 
 data_words = pd.read_csv("../datasets/words_dates_list_cw.csv")
@@ -71,21 +72,17 @@ data_words.reset_index(drop=True,inplace=True)
 key_count = data_words.groupby(["keyword"], sort=False).count().reset_index()
 key_count = key_count.loc[key_count['freq'] >= 5]
 word_data = deepcopy(key_count.keyword)
-#word_list = sorted(map(str, list(word_data)))
 word_list = list(map(str, list(word_data)))
-for i in word_list:
-    if 'phone' in i:
-        print(i)
 
 
-# In[8]:
+# In[27]:
 
 
 from sklearn.preprocessing import MinMaxScaler
 scaler = MinMaxScaler()
 
 
-# In[9]:
+# In[28]:
 
 
 # Signal extention
@@ -102,7 +99,7 @@ def extend_signal(data):
     return data.fillna(0)
 
 
-# In[11]:
+# In[47]:
 
 
 # GUI for stock details
@@ -129,6 +126,15 @@ class App(tk.Tk):
             frame.configure(background='#ffffff')
 
         self.show_frame("StartPage")
+        folder='graph_images'
+        if os.path.exists(folder):
+            for the_file in os.listdir(folder):
+                file_path = os.path.join(folder, the_file)
+                try:
+                    if os.path.isfile(file_path):
+                        os.unlink(file_path)
+                except Exception as e:
+                    pass
 
     def show_frame(self, page_name):
         '''Show a frame for the given page name'''
@@ -222,10 +228,7 @@ class StartPage(tk.Frame):
         cp = pd.DataFrame(stocks_data_2016[stocks_data_2016.Company==company].Close,columns={'Close'})
         scaled_cp = pd.DataFrame(scaler.fit_transform(cp),columns={'Close'})
         scaled_cp.set_index(cp.index,inplace=True)
-        
-
         temp = self.smooth_keys(keys)
-
         plt.figure(figsize = (10,5))
         plt.plot(scaled_cp,label=company)
         for i,word in zip(temp,keys):
@@ -243,51 +246,54 @@ class StartPage(tk.Frame):
     
     
     def select(self):
-        self.gotobtnright.config(state = "normal")
-        def insert_into_entry():
-            items = list(map(int, lb.curselection()))
-            if items != ():
-                global selected_item
-                selected_item=[lb.get(items[i]) for i in range(len(items))]
-                return (selected_item)
-        global comp
-        comp = self.var.get()
-        global keys
-        keys = insert_into_entry()
-    
-        path,cp = self.plot(comp,keys)
-        self.canvas.delete("all")
-        self.c.delete('all')
-        self.c1.delete('all')
-        # graph
-        image = Image.open(path)
-        img = ImageTk.PhotoImage(image)
-        self.canvas.create_image(450,250, image=img)
-        label = tk.Label(image=img)
-        label.image = img 
-        image.close()
+        try:
+            self.gotobtnright.config(state = "normal")
+            def insert_into_entry():
+                items = list(map(int, lb.curselection()))
+                if items != ():
+                    global selected_item
+                    selected_item=[lb.get(items[i]) for i in range(len(items))]
+                    return (selected_item)
+            global comp
+            comp = self.var.get()
+            global keys
+            keys = insert_into_entry()
 
-        # Dickey Fuller test and KPSS test
-        df_res = aDickeyFuller(cp.Close)
-        kpss_res = kpss_test(cp.Close)
+            path,cp = self.plot(comp,keys)
+            self.canvas.delete("all")
+            self.c.delete('all')
+            self.c1.delete('all')
+            # graph
+            image = Image.open(path)
+            img = ImageTk.PhotoImage(image)
+            self.canvas.create_image(450,250, image=img)
+            label = tk.Label(image=img)
+            label.image = img 
+            image.close()
 
-        # dfuller
-        self.c1.create_text(58,15,fill="Black",font="Times 10 bold",
-                                text="Dickey Fuller Test", justify = "center")
-        Text = "\n".join(["{0} :  {1}".format(key, df_res[key]) for key in df_res if key != "Critical values"])
-        for key in df_res["Critical values"]:
-            Text += ("\n \t {0} :  {1}".format(key, df_res["Critical values"][key]))
-        self.c1.create_text(135, 80, fill = "Black", font = "Times 10", text = Text, justify='left')
-        
-        #kpss
-        self.c.create_text(38,15,fill="Black",font="Times 10 bold",
-                                text="KPSS Test",justify = "center")
-        Text_kpss = "\n".join(["{0} :  {1}".format(key, kpss_res[key]) for key in kpss_res if key != "Critical values"])
-        for key in kpss_res["Critical values"]:
-            Text_kpss += ("\n \t {0} :  {1}".format(key, kpss_res["Critical values"][key]))
-        self.c.create_text(135, 80, fill = "Black", font = "Times 10", text = Text_kpss, justify='left')
-        
-        
+            # Dickey Fuller test and KPSS test
+            df_res = aDickeyFuller(cp.Close)
+            kpss_res = kpss_test(cp.Close)
+
+            # dfuller
+            self.c1.create_text(58,15,fill="Black",font="Times 10 bold",
+                                    text="Dickey Fuller Test", justify = "center")
+            Text = "\n".join(["{0} :  {1}".format(key, df_res[key]) for key in df_res if key != "Critical values"])
+            for key in df_res["Critical values"]:
+                Text += ("\n \t {0} :  {1}".format(key, df_res["Critical values"][key]))
+            self.c1.create_text(135, 80, fill = "Black", font = "Times 10", text = Text, justify='left')
+
+            #kpss
+            self.c.create_text(38,15,fill="Black",font="Times 10 bold",
+                                    text="KPSS Test",justify = "center")
+            Text_kpss = "\n".join(["{0} :  {1}".format(key, kpss_res[key]) for key in kpss_res if key != "Critical values"])
+            for key in kpss_res["Critical values"]:
+                Text_kpss += ("\n \t {0} :  {1}".format(key, kpss_res["Critical values"][key]))
+            self.c.create_text(135, 80, fill = "Black", font = "Times 10", text = Text_kpss, justify='left')
+
+        except:
+            self.gotobtnright.config(state = "disabled")
+            pass
         
 
 
@@ -354,7 +360,7 @@ class PageOne(tk.Frame):
         combo1['values']= smooth_methods
         combo1.grid(row=17,column=2,padx=20,pady=30)
         
-        l4 = tk.Label(self, text="Filter techniques",font='Helvetica 11 bold',justify=tk.CENTER)
+        l4 = tk.Label(self, text="Filtering techniques",font='Helvetica 11 bold',justify=tk.CENTER)
         l4.configure(background='#ffffff')
         l4.grid(row=18,column=1)
         
@@ -446,108 +452,100 @@ class PageOne(tk.Frame):
             temp_cp = cp.Close - 2*cp.Close.shift()+ cp.Close.shift(periods=2)
             temp_cp = extend_signal(temp_cp)
         
-        temp_cp = self.sm_dict[sm](temp_cp)
-        temp_cp.rename(columns={0 : 'Close'},inplace=True)
-        temp_cp = extend_signal(temp_cp.Close)
-        temp_cp = self.fm_dict[fm](temp_cp)
-        temp_cp = pd.DataFrame(temp_cp,columns=['Close'])
-        
-        # Scaling
-        scaled_cp = pd.DataFrame(scaler.fit_transform(temp_cp),columns={'Close'})
-        scaled_cp.set_index(temp_cp.index,inplace=True)
-        
-        path,imputed_key = self.plotvalues(comp,scaled_cp,keys)
-        self.canvas.delete("all")
-        self.c.delete('all')
-        self.c1.delete('all')
-        self.c2.delete('all')
-        self.c3.delete('all')
-        
-        # graph
-        image = Image.open(path)
-        img = ImageTk.PhotoImage(image)
-        self.canvas.create_image(450,230, image=img)
-        label = tk.Label(image=img)
-        label.image = img 
-        image.close()
-        
-        
-        # Dickey Fuller test and KPSS test
-        df_res = aDickeyFuller(scaled_cp.Close)
-        kpss_res = kpss_test(scaled_cp.Close)
-        
-        # dfuller
-        self.c.create_text(58,15,fill="Black",font="Times 10 bold",
-                                text="Dickey Fuller Test", justify = "center")
-        Text = "\n".join(["{0} :  {1}".format(key, df_res[key]) for key in df_res if key != "Critical values"])
-        for key in df_res["Critical values"]:
-            Text += ("\n \t {0} :  {1}".format(key, df_res["Critical values"][key]))
-        self.c.create_text(135, 80, fill = "Black", font = "Times 10", text = Text, justify='left')
-        
-        #kpss
-        self.c1.create_text(38,15,fill="Black",font="Times 10 bold",
-                                text="KPSS Test",justify = "center")
-        Text_kpss = "\n".join(["{0} :  {1}".format(key, kpss_res[key]) for key in kpss_res if key != "Critical values"])
-        for key in kpss_res["Critical values"]:
-            Text_kpss += ("\n \t {0} :  {1}".format(key, kpss_res["Critical values"][key]))
-        self.c1.create_text(135, 80, fill = "Black", font = "Times 10", text = Text_kpss, justify='left')
-        
-        RMSE={}
-        res_granger = {}
-        for key_data,word in zip(imputed_key,keys):
-            #print(key_data.isna().sum())
-            x=pd.concat([scaled_cp,key_data],axis=1)
-            RMSE[word]=rmse(x.Close,x[word])
-            lags=50
-            try:                
-                res = granger_test(x)
-                pvalues = {}
-                for i in range(10,lags+1,10):
-                    pvalues["lag "+str(i)]=res[i][0]['ssr_ftest'][1]
-                res_granger[word]=pvalues 
-            except Exception as e:
-                lags = int(str(e).split()[-1])
-                print(str(e))
-                print(lags)
-                
-                res = granger_test(x,lags)
-                pvalues = {}
-                s = 1
-                e = lags+1
-                if lags < 10 :
-                    skip = 2
-                elif lags < 30:
-                    skip = 4
-                elif lags < 50:
-                    skip = 10          
-                for i in range(s,lags+1,skip):
-                    pvalues["lag "+str(i)]=res[i][0]['ssr_ftest'][1]
-                res_granger[word]=pvalues
-                
-            
-        print(res_granger)
+        try:
+            temp_cp = self.sm_dict[sm](temp_cp)
+            temp_cp.rename(columns={0 : 'Close'},inplace=True)
+            temp_cp = extend_signal(temp_cp.Close)
+            temp_cp = self.fm_dict[fm](temp_cp)
+            temp_cp = pd.DataFrame(temp_cp,columns=['Close'])
 
-        
-        #RMSE
-        self.c3.create_text(90,15,fill="Black",font="Times 10 bold",
-                                text="Root Mean Square Error",justify = "center")
-        Text_rmse = "\n".join(["{0} :  {1}".format(key, RMSE[key]) for key in RMSE])
-        self.c3.create_text(105, 70, fill = "Black", font = "Times 10", text =Text_rmse , justify='left')
-        
-        #Granger test
-        Text_rmse=""
-        self.c2.create_text(150,20, fill = "Black", font = "Times 11 bold", text = "*Lower is better*", justify='left')
-        for word in keys:
-            Text_rmse += word+" :\n"
-            Text_rmse+= "   p value :\n"
-            Text_rmse += "\n".join(["         {0} :  {1}".format(lag, res_granger[word][lag]) for lag in res_granger[word]])
-            Text_rmse+="\n"
-        print(Text_rmse)
-        self.c2.create_text(120, 120, fill = "Black", font = "Times 10", text =Text_rmse , justify='left')
+            # Scaling
+            scaled_cp = pd.DataFrame(scaler.fit_transform(temp_cp),columns={'Close'})
+            scaled_cp.set_index(temp_cp.index,inplace=True)
+
+            path,imputed_key = self.plotvalues(comp,scaled_cp,keys)
+            self.canvas.delete("all")
+            self.c.delete('all')
+            self.c1.delete('all')
+            self.c2.delete('all')
+            self.c3.delete('all')
+
+            # graph
+            image = Image.open(path)
+            img = ImageTk.PhotoImage(image)
+            self.canvas.create_image(450,230, image=img)
+            label = tk.Label(image=img)
+            label.image = img 
+            image.close()
+
+            # Dickey Fuller test and KPSS test
+            df_res = aDickeyFuller(scaled_cp.Close)
+            kpss_res = kpss_test(scaled_cp.Close)
+
+            # dfuller
+            self.c.create_text(58,15,fill="Black",font="Times 10 bold",
+                                    text="Dickey Fuller Test", justify = "center")
+            Text = "\n".join(["{0} :  {1}".format(key, df_res[key]) for key in df_res if key != "Critical values"])
+            for key in df_res["Critical values"]:
+                Text += ("\n \t {0} :  {1}".format(key, df_res["Critical values"][key]))
+            self.c.create_text(135, 80, fill = "Black", font = "Times 10", text = Text, justify='left')
+
+            #kpss
+            self.c1.create_text(38,15,fill="Black",font="Times 10 bold",
+                                    text="KPSS Test",justify = "center")
+            Text_kpss = "\n".join(["{0} :  {1}".format(key, kpss_res[key]) for key in kpss_res if key != "Critical values"])
+            for key in kpss_res["Critical values"]:
+                Text_kpss += ("\n \t {0} :  {1}".format(key, kpss_res["Critical values"][key]))
+            self.c1.create_text(135, 80, fill = "Black", font = "Times 10", text = Text_kpss, justify='left')
+
+            RMSE={}
+            res_granger = {}
+            for key_data,word in zip(imputed_key,keys):
+                x=pd.concat([scaled_cp,key_data],axis=1)
+                RMSE[word]=rmse(x.Close,x[word])
+                lags=50
+                try:                
+                    res = granger_test(x)
+                    pvalues = {}
+                    for i in range(10,lags+1,10):
+                        pvalues["lag "+str(i)]=res[i][0]['ssr_ftest'][1]
+                    res_granger[word]=pvalues 
+                except Exception as e:
+                    lags = int(str(e).split()[-1])
+                    res = granger_test(x,lags)
+                    pvalues = {}
+                    s = 1
+                    e = lags+1
+                    if lags < 10 :
+                        skip = 2
+                    elif lags < 30:
+                        skip = 4
+                    elif lags < 50:
+                        skip = 10          
+                    for i in range(s,lags+1,skip):
+                        pvalues["lag "+str(i)]=res[i][0]['ssr_ftest'][1]
+                    res_granger[word]=pvalues
 
 
-        
-        
+            #RMSE
+            self.c3.create_text(90,15,fill="Black",font="Times 10 bold",
+                                    text="Root Mean Square Error",justify = "center")
+            Text_rmse = "\n".join(["{0} :  {1}".format(key, RMSE[key]) for key in RMSE])
+            self.c3.create_text(105, 70, fill = "Black", font = "Times 10", text =Text_rmse , justify='left')
+
+            #Granger test
+            Text_rmse=""
+            self.c2.create_text(150,20, fill = "Black", font = "Times 11 bold", text = "*Lower is better*", justify='left')
+            for word in keys:
+                Text_rmse += word+" :\n"
+                Text_rmse+= "   p value :\n"
+                Text_rmse += "\n".join(["         {0} :  {1}".format(lag, res_granger[word][lag]) for lag in res_granger[word]])
+                Text_rmse+="\n"
+            self.c2.create_text(120, 120, fill = "Black", font = "Times 10", text =Text_rmse , justify='left')
+        except:
+            pass
+
+
 
 # screen 3
 class PageTwo(tk.Frame):
@@ -589,7 +587,6 @@ class PageTwo(tk.Frame):
         
         self.canvas.delete('all')
         image = Image.open(path)
-        #image.show()
         self.image = ImageTk.PhotoImage(image)
         self.img_id = self.canvas.create_image(480,300, image=self.image)
         self.canvas.update_idletasks()
@@ -598,8 +595,7 @@ class PageTwo(tk.Frame):
         image.close()
         
     def create_canvas_img(self,rmse,company,method=""):
-        PATH = "graph_images/"+company+"_"+method+".jpeg"
-            
+        PATH = "graph_images/"+company+"_"+method+".jpeg"  
         plt.title("company : "+ company,fontsize=10)
         plt.xlabel("Date")
         plt.legend()
@@ -659,10 +655,10 @@ class PageTwo(tk.Frame):
         grp_img_path = "graph_images/"+comp+"_lr"+".jpeg"
         if not os.path.exists(grp_img_path):
             self.load_image(PATH)
-            self.rmse['lr'] = regression_model(scaled_cp)
-            self.create_canvas_img(self.rmse['lr'],comp,"lr")
+            self.rmse[comp+'lr'] = regression_model(scaled_cp)
+            self.create_canvas_img(self.rmse[comp+'lr'],comp,"lr")
         else:
-            self.is_img_exists(grp_img_path,self.rmse['lr'])
+            self.is_img_exists(grp_img_path,self.rmse[comp+'lr'])
             
         
         
@@ -674,10 +670,10 @@ class PageTwo(tk.Frame):
         grp_img_path = "graph_images/"+comp+"_arimax"+".jpeg"
         if not os.path.exists(grp_img_path):
             self.load_image(PATH)
-            self.rmse['arimax'] = auto_arimax(scaled_cp)
-            self.create_canvas_img(self.rmse['arimax'],comp,"arimax")
+            self.rmse[comp+'arimax'] = auto_arimax(scaled_cp)
+            self.create_canvas_img(self.rmse[comp+'arimax'],comp,"arimax")
         else:
-            self.is_img_exists(grp_img_path,self.rmse['arimax'])
+            self.is_img_exists(grp_img_path,self.rmse[comp+'arimax'])
     
     def lstm(self):
         stocks_data_2016_end = stocks_data['2016':]
@@ -687,10 +683,10 @@ class PageTwo(tk.Frame):
         grp_img_path = "graph_images/"+comp+"_lstm"+".jpeg"
         if not os.path.exists(grp_img_path):
             self.load_image(PATH)
-            self.rmse['lstm'] = shallow_lstm(scaled_cp)
-            self.create_canvas_img(self.rmse['lstm'],comp,"lstm")
+            self.rmse[comp+'lstm'] = shallow_lstm(scaled_cp)
+            self.create_canvas_img(self.rmse[comp+'lstm'],comp,"lstm")
         else:
-            self.is_img_exists(grp_img_path,self.rmse['lstm'])
+            self.is_img_exists(grp_img_path,self.rmse[comp+'lstm'])
     
         
 
@@ -702,11 +698,11 @@ class PageTwo(tk.Frame):
         grp_img_path = "graph_images/"+comp+"_p"+".jpeg"
         if not os.path.exists(grp_img_path):
             self.load_image(PATH)
-            self.rmse['p'] = prophet(scaled_cp)
-            self.create_canvas_img(self.rmse['p'],comp,"p")
+            self.rmse[comp+'p'] = prophet(scaled_cp)
+            self.create_canvas_img(self.rmse[comp+'p'],comp,"p")
         else:
-            self.is_img_exists(grp_img_path,self.rmse['p'])
-        
+            self.is_img_exists(grp_img_path,self.rmse[comp+'p'])
+            
 
 if __name__ == "__main__":
     window = App()
