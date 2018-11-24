@@ -61,7 +61,7 @@ python GUI/GUI.py
 ```
   pip install -r requirements.txt
 ```
-<b> ** Please note that not all packages can be installed from the above command. If encountered with an error please manually install  the package from the list in the requirements.txt.</b>
+<b> ** Please note that all packages cannot be installed from the above command. If encountered with an error please manually install the package from the list in the requirements.txt.</b>
 
 <h4> Project Structure </h4>
 
