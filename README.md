@@ -2,7 +2,7 @@
 
 Created: 25 September 2018
 
-<b>Dataset Used:</b>
+<b>Dataset Acquisition Sources:</b>
 <ol>
   <li>https://www.kaggle.com/borismarjanovic/price-volume-data-for-all-us-stocks-etfs</li>
   <li>https://trendogate.com/     [Scrapped the required data] </li>
@@ -26,7 +26,7 @@ Created: 25 September 2018
   <li><b>20 November 2018:</b> Bug Fixing and Debugging.</li>
   <li><b>21 November 2018:</b> GUI Integration. Video Recording. Editing.</li>
   <li><b>22 November 2018:</b> First draft of the Report.</li>
-  <li><b>23 November 2018:</b> Finalise report. Testing and Debugging.</li>
+  <li><b>23 November 2018:</b> Finalize report. Testing and Debugging.</li>
 </ol>
   
   
@@ -35,5 +35,5 @@ Created: 25 September 2018
 ```
   pip install -r requirements.txt
 ```
-
+<b> ** Please note that not all packages can be installed from the above command. If encountered with an error please manually install  the package from the list in the requirements.txt.</b>
 
