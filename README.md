@@ -2,11 +2,16 @@
 
 Created: 25 September 2018
 
+[![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)]()
+![Status](https://img.shields.io/badge/status-active-brightgreen.svg?style=flat)
+![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
+
 <h4>A brief overview of the project is available at an alternate site. Please click on the image :</h4>
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=OMjrD539SFk
 " target="_blank"><img src="http://img.youtube.com/vi/OMjrD539SFk/0.jpg" 
 alt="IMAGE ALT TEXT HERE" width="400" height="250" border="10" /></a>
 
+----
 
 <h4> To the run the project</h4>
 
@@ -23,9 +28,11 @@ python GUI/GUI.py
 
 <b>Preprocessed datasets:</b>
 <ol>
-  <li>[ Compressed Dataset ]( https://drive.google.com/file/d/19Srw3pxNe1S01X_Q5qj19ADAh8egwNTl/view?usp=sharing ) </li>
-  <li>[ Uncompressed CSV ]( https://drive.google.com/file/d/1N-FCUykn-t9pmbdBZH9HcUhrmqflgP9a/view?usp=sharing )</li>
+  <li><a href="https://drive.google.com/file/d/19Srw3pxNe1S01X_Q5qj19ADAh8egwNTl/view?usp=sharing">Compressed Dataset</a></li>
+  <li><a href="https://drive.google.com/file/d/1N-FCUykn-t9pmbdBZH9HcUhrmqflgP9a/view?usp=sharing">Uncompressed CSV</a></li>
 </ol>
+
+----
 
 <h2>Progress:</h2>
 <ol>
@@ -46,6 +53,8 @@ python GUI/GUI.py
   <li><b>22 November 2018:</b> First draft of the Report.</li>
   <li><b>23 November 2018:</b> Finalize report. Testing and Debugging.</li>
 </ol>
+
+----
 
 <b>To install the required packages</b>
 ```
@@ -115,4 +124,10 @@ Please maintain the project structure as follows [After downloading the dataset]
 ```
 <h4> The folders ./ETFs and ./Stocks are not completely necessary but few modules may not work in their absence<h4>
   
-  
+## License
+
+This project is made available under the [MIT License](http://www.opensource.org/licenses/mit-license.php).
+
+## Credits
+
+The project is created and maintained by [Vinayak R Kamath](https://github.com/craterkamath), [Nikhil V Revankar](https://github.com/nikhil3198) and [Vikram G](https://github.com/vikramgopal).  
