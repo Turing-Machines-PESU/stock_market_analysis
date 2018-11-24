@@ -2,12 +2,23 @@
 
 Created: 25 September 2018
 
+<h4> To the run the project</h4>
+```
+python GUI/GUI.py
+```
 <b>Dataset Acquisition Sources:</b>
 <ol>
   <li>https://www.kaggle.com/borismarjanovic/price-volume-data-for-all-us-stocks-etfs</li>
   <li>https://trendogate.com/     [Scrapped the required data] </li>
   <li>https://www.nasdaq.com/screening/company-list.aspx         [Details on companies and Symbol list]</li>
 </ol>
+
+<b>Preprocessed datasets:</b>
+<ol>
+  <li>[Compressed Dataset](https://drive.google.com/file/d/19Srw3pxNe1S01X_Q5qj19ADAh8egwNTl/view?usp=sharing) </li>
+  <li>[Uncompressed CSV](https://drive.google.com/file/d/1N-FCUykn-t9pmbdBZH9HcUhrmqflgP9a/view?usp=sharing)</li>
+</ol>
+
 
 <h2>Progress:</h2>
 <ol>
@@ -28,8 +39,6 @@ Created: 25 September 2018
   <li><b>22 November 2018:</b> First draft of the Report.</li>
   <li><b>23 November 2018:</b> Finalize report. Testing and Debugging.</li>
 </ol>
-  
-  
 
 <b>To install the required packages</b>
 ```
@@ -37,3 +46,61 @@ Created: 25 September 2018
 ```
 <b> ** Please note that not all packages can be installed from the above command. If encountered with an error please manually install  the package from the list in the requirements.txt.</b>
 
+<h4> Project Structure </h4>
+
+Please maintain the project as follows [After downloading the dataset]:
+        .
+        ├── _config.yml
+        ├── datasets
+        │   ├── Companies
+        │   │   ├── companylist (1).csv
+        │   │   ├── companylist (2).csv
+        │   │   └── companylist.csv
+        │   ├── companies_stocks.csv
+        │   ├── filtered_companies.csv
+        │   ├── hashtags.csv
+        │   ├── regions.csv
+        │   ├── segmented_tags.csv
+        │   ├── twitter.csv
+        │   ├── words_dates_list_cw.csv
+        │   └── words_dates_list_gnrl.csv
+        ├── Dickey Fuller Test and Filters.ipynb
+        ├── ETFs
+        ├── Forecasting
+        │   ├── advanced_analysis_xerox.ipynb
+        │   ├── Basic_prediction_with_lstm.ipynb
+        │   ├── company_preprocessed_data.csv
+        │   ├── Forecasting using Auto Arima.ipynb
+        │   ├── LinearRegressionModel.py
+        │   ├── lstm.py
+        │   ├── preprocess_data.py
+        │   ├── stock_data.py
+        │   └── visualize.py
+        ├── GUI
+        │   ├── graph_images
+        │   ├── GUI.ipynb
+        │   ├── GUI.py
+        │   └── loading.jpg
+        ├── index.md
+        ├── modules
+        │   ├── basic.py
+        │   └── forecast.py
+        ├── packages.txt
+        ├── README.md
+        ├── requirements.txt
+        ├── scripts
+        │   ├── hashtags_segmentation.py
+        │   ├── mergestocks.py
+        │   ├── process_companies.py
+        │   ├── regions_scrape.py
+        │   ├── seg_tags_preprocess.py
+        │   ├── twitterscrape.py
+        │   └── update_companies.py
+        ├── stock_notes.txt
+        ├── Stocks
+        ├── Understanding_companies_stocks.py
+        ├── Understanding_Dataset.ipynb
+        ├── Understanding_Dataset.py
+        ├── Understanding_stocks.ipynb
+        ├── understanding_twitter_dataset.ipynb
+        └── understanding_twitter_dataset.py
