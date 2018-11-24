@@ -1,11 +1,12 @@
 # stock_market_analysis
 
 Created: 25 September 2018
+Completed: 24 November 2018
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)]()
-![Status](https://img.shields.io/badge/status-active-brightgreen.svg?style=flat)
+![Status](https://img.shields.io/badge/Status-Inactive-orange.svg)
 [![License](https://img.shields.io/badge/license-mit-brightgreen.svg?style=flat)](https://github.com/Turing-Machines-PESU/stock_market_analysis/blob/master/LICENSE)
-![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)
+![Maintenance](https://img.shields.io/badge/Maintained-No-green.svg)
 
 <h4>A brief overview of the project is available at an alternate site. Please click on the image :</h4>
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=OMjrD539SFk
