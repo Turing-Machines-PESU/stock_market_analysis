@@ -69,60 +69,62 @@ python GUI/GUI.py
 Please maintain the project structure as follows [After downloading the dataset]:
         .
  ```
-  ├── _config.yml
-  ├── datasets
-  │   ├── Companies
-  │   │   ├── companylist (1).csv
-  │   │   ├── companylist (2).csv
-  │   │   └── companylist.csv
-  │   ├── companies_stocks.csv
-  │   ├── filtered_companies.csv
-  │   ├── hashtags.csv
-  │   ├── regions.csv
-  │   ├── segmented_tags.csv
-  │   ├── twitter.csv
-  │   ├── words_dates_list_cw.csv
-  │   └── words_dates_list_gnrl.csv
-  ├── Dickey Fuller Test and Filters.ipynb
-  ├── ETFs
-  ├── Forecasting
-  │   ├── advanced_analysis_xerox.ipynb
-  │   ├── Basic_prediction_with_lstm.ipynb
-  │   ├── company_preprocessed_data.csv
-  │   ├── Forecasting using Auto Arima.ipynb
-  │   ├── LinearRegressionModel.py
-  │   ├── lstm.py
-  │   ├── preprocess_data.py
-  │   ├── stock_data.py
-  │   └── visualize.py
-  ├── GUI
-  │   ├── graph_images
-  │   ├── GUI.ipynb
-  │   ├── GUI.py
-  │   └── loading.jpg
-  ├── index.md
-  ├── modules
-  │   ├── basic.py
-  │   └── forecast.py
-  ├── packages.txt
-  ├── README.md
-  ├── requirements.txt
-  ├── scripts
-  │   ├── hashtags_segmentation.py
-  │   ├── mergestocks.py
-  │   ├── process_companies.py
-  │   ├── regions_scrape.py
-  │   ├── seg_tags_preprocess.py
-  │   ├── twitterscrape.py
-  │   └── update_companies.py
-  ├── stock_notes.txt
-  ├── Stocks
-  ├── Understanding_companies_stocks.py
-  ├── Understanding_Dataset.ipynb
-  ├── Understanding_Dataset.py
-  ├── Understanding_stocks.ipynb
-  ├── understanding_twitter_dataset.ipynb
-  └── understanding_twitter_dataset.py
+    ├── _config.yml
+    ├── datasets
+    │   ├── Companies
+    │   │   ├── companylist (1).csv
+    │   │   ├── companylist (2).csv
+    │   │   └── companylist.csv
+    │   ├── companies_stocks.csv
+    │   ├── filtered_companies.csv
+    │   ├── hashtags.csv
+    │   ├── regions.csv
+    │   ├── segmented_tags.csv
+    │   ├── twitter.csv
+    │   ├── words_dates_list_cw.csv
+    │   └── words_dates_list_gnrl.csv
+    ├── Dickey Fuller Test and Filters.ipynb
+    ├── ETFs
+    ├── Forecasting
+    │   ├── advanced_analysis_xerox.ipynb
+    │   ├── Basic_prediction_with_lstm.ipynb
+    │   ├── company_preprocessed_data.csv
+    │   ├── Forecasting using Auto Arima.ipynb
+    │   ├── LinearRegressionModel.py
+    │   ├── lstm.py
+    │   ├── preprocess_data.py
+    │   ├── stock_data.py
+    │   └── visualize.py
+    ├── GUI
+    │   ├── graph_images
+    │   ├── GUI.ipynb
+    │   ├── GUI.py
+    │   └── loading.jpg
+    ├── index.md
+    ├── LICENSE
+    ├── modules
+    │   ├── basic.py
+    │   └── forecast.py
+    ├── packages.txt
+    ├── README.md
+    ├── requirements.txt
+    ├── scripts
+    │   ├── hashtags_segmentation.py
+    │   ├── mergestocks.py
+    │   ├── process_companies.py
+    │   ├── regions_scrape.py
+    │   ├── seg_tags_preprocess.py
+    │   ├── twitterscrape.py
+    │   └── update_companies.py
+    ├── stock_notes.txt
+    ├── Stocks
+    ├── stocks.csv
+    ├── Understanding_companies_stocks.py
+    ├── Understanding_Dataset.ipynb
+    ├── Understanding_Dataset.py
+    ├── Understanding_stocks.ipynb
+    ├── understanding_twitter_dataset.ipynb
+    └── understanding_twitter_dataset.py
 ```
 <h4> The folders ./ETFs and ./Stocks are not completely necessary but few modules may not work in their absence<h4>
   
